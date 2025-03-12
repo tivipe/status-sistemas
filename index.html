@@ -91,7 +91,19 @@
     }
 
     setInterval(verificarStatus, 60000);
+
+    <button onclick="testarWebhook()">🚀 Testar Webhook no Teams</button>
+<script>
+    function testarWebhook() {
+        fetch("https://ffa2.webhook.office.com/webhookb2/b3412112-f3ba-42ce-b2a1-26503876fd57@e6fdcadd-11ff-438d-8faa-6441ef124150/IncomingWebhook/fe5a217a58f6460d84b90b6a98f0f1e5/61a8d976-bf2d-4dac-86ad-d846b249896e/V2JSReM3fz00vfsqxOEVO_mn7mtMdphRnivzExJpNGGFI1", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: "🚨 Teste de alerta manual enviado pelo botão do site!" })
+        }).then(response => console.log("✅ Resposta do Teams:", response))
+        .catch(error => console.error("❌ Erro ao conectar ao Webhook:", error));
+    }
 </script>
+
 
 
 </head>
