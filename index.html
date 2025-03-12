@@ -52,69 +52,13 @@
         }
     </style>
     <script>
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
-        });
-
         function atualizarUltimaAtualizacao() {
             const agora = new Date();
             const horario = agora.toLocaleString('pt-BR');
             document.getElementById("last-update").innerText = "Última atualização: " + horario;
         }
 
-        function atualizarStatus(apiUrl, statusId, detailsId) {
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(dados => {
-                    const indicator = dados.status.indicator;
-                    const statusElement = document.getElementById(statusId);
-                    const detailsElement = document.getElementById(detailsId);
-                    const cardElement = statusElement.closest('.status-card');
-
-                    switch (indicator) {
-                        case 'none':
-                            statusElement.innerHTML = '🟢 Operacional';
-                            statusElement.className = 'status-green';
-                            cardElement.className = 'status-card';
-                            detailsElement.innerText = 'Tudo está em funcionamento.';
-                            break;
-                        case 'minor':
-                            statusElement.innerHTML = '🟡 Instável';
-                            statusElement.className = 'status-yellow';
-                            cardElement.className = 'status-card status-yellow';
-                            detailsElement.innerText = 'Algumas funcionalidades podem estar instáveis.';
-                            break;
-                        case 'major':
-                        case 'critical':
-                            statusElement.innerHTML = '🔴 Fora do Ar';
-                            statusElement.className = 'status-red';
-                            cardElement.className = 'status-card status-red';
-                            detailsElement.innerText = 'O sistema está fora do ar. A equipe do fornecedor está investigando.';
-                            break;
-                        default:
-                            statusElement.innerHTML = '⚪ Desconhecido';
-                            statusElement.className = 'status-gray';
-                            detailsElement.innerText = 'Não foi possível obter informações de status.';
-                            break;
-                    }
-                })
-                .catch(error => console.error(`Erro ao buscar status da API: ${apiUrl}`, error));
-        }
-
         function iniciarAtualizacoes() {
-            atualizarStatus('https://status.clicksign.com/api/v2/status.json', 'clicksign-status', 'clicksign-details');
-            atualizarStatus('https://status.pipefy.com/api/v2/status.json', 'pipefy-status', 'pipefy-details');
-            atualizarStatus('https://status.convenia.com.br/api/v2/status.json', 'convenia-status', 'convenia-details');
-            atualizarStatus('https://status.bitrix24.com/api/v2/status.json', 'bitrix-status', 'bitrix-details');
-            atualizarStatus('https://status.transfeera.com/api/v2/status.json', 'transfeera-status', 'transfeera-details');
-            atualizarStatus('https://status.clickcompliance.com/api/v2/status.json', 'clickcompliance-status', 'clickcompliance-details');
-            atualizarStatus('https://status.datajuri.com.br/api/v2/status.json', 'datajuri-status', 'datajuri-details');
             atualizarUltimaAtualizacao();
         }
 
@@ -130,7 +74,16 @@
     <div class="status-container">
         <div class="status-card status-yellow"><h3>Sistema RBM (WebSCM, WebAgente, WebRH)</h3><p class="status-yellow">🟡 Instável</p><p class="details">Falha no Serasa.</p></div>
         <div class="status-card"><h3>Internet VIVO</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Internet Mundivox</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
         <div class="status-card"><h3>Outlook</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Teams</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Assina RBM</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Ponto Mais</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Clicksign</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Pipefy</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Convenia - RH</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>ClickCompliance</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Datajuri</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
     </div>
     <p id="last-update" class="last-update">Última atualização: --</p>
 </body>
