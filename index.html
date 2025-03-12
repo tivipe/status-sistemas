@@ -53,6 +53,28 @@
         }
     </style>
     <script>
+
+        // Bloqueia clique com botão direito do mouse
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
+    // Bloqueia teclas que podem abrir o DevTools ou exibir código-fonte
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+        }
+    });
+
+    // Impede o uso do console do DevTools
+    setInterval(function () {
+        let devtools = window.outerHeight - window.innerHeight > 160;
+        if (devtools) {
+            document.body.innerHTML = "<h1>Acesso negado!</h1>";
+        }
+    }, 1000);
+
+    
         function atualizarUltimaAtualizacao() {
             const agora = new Date();
             const horario = agora.toLocaleString('pt-BR');
