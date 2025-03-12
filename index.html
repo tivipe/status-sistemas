@@ -5,67 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status dos Sistemas - VIPe</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-        .header { background-color: #0078d4; color: white; padding: 15px; text-align: center; font-size: 24px; }
-        .status-container { display: flex; flex-wrap: wrap; gap: 15px; padding: 20px; justify-content: center; }
-        .status-card { background-color: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); text-align: center; width: 200px; }
-        .status-green { color: green; } .status-yellow { color: orange; background-color: #fff8dc; }
-        .status-red { color: red; background-color: #ffe6e6; } .status-gray { color: gray; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #0078d4;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .status-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            justify-content: center;
+        }
+        .status-card {
+            background-color: white;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 180px;
+            font-size: 12px;
+        }
+        .status-green { color: green; }
+        .status-yellow { color: orange; background-color: #fff8dc; }
+        .status-red { color: red; background-color: #ffe6e6; }
+        .status-gray { color: gray; }
         .last-update { font-size: 12px; color: #777; text-align: center; margin-top: 10px; }
-        .details { font-size: 12px; color: #555; margin-top: 8px; }
-        .refresh-button { display: block; margin: 20px auto; padding: 10px 20px; font-size: 14px; background-color: #0078d4; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .details { font-size: 10px; color: #555; margin-top: 5px; }
+        .refresh-button {
+            display: block;
+            margin: 10px auto;
+            padding: 8px 15px;
+            font-size: 12px;
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
     <script>
-        const webhookURL = "https://ffa2.webhook.office.com/webhookb2/b3412112-f3ba-42ce-b2a1-26503876fd57@e6fdcadd-11ff-438d-8faa-6441ef124150/IncomingWebhook/fe5a217a58f6460d84b90b6a98f0f1e5/61a8d976-bf2d-4dac-86ad-d846b249896e/V2JSReM3fz00vfsqxOEVO_mn7mtMdphRnivzExJpNGGFI1";
-
-        function enviarAlertaTeams(sistema, status, detalhes) {
-            const mensagem = { text: `🚨 *ALERTA*: O sistema **${sistema}** está agora **${status}**! 📌 ${detalhes}` };
-            fetch(webhookURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(mensagem)
-            }).then(response => {
-                if (response.ok) console.log("✅ Alerta enviado para o Teams!");
-                else console.error("❌ Erro ao enviar alerta.");
-            }).catch(error => console.error("❌ Falha ao conectar ao Webhook:", error));
+        function atualizarUltimaAtualizacao() {
+            const agora = new Date();
+            const horario = agora.toLocaleString('pt-BR');
+            document.getElementById("last-update").innerText = "Última atualização: " + horario;
         }
 
-        function verificarStatus() {
-            const sistemas = [
-                { id: "rbm-status", nome: "Sistema RBM", detalhes: "🚨 Problema no acesso ao Serasa! A Dimensa (RBM) está atuando para corrigir." },
-                { id: "clicksign-status", nome: "Clicksign", detalhes: "🔴 Serviço fora do ar." },
-                { id: "pipefy-status", nome: "Pipefy", detalhes: "🟡 Instabilidade detectada." },
-                { id: "convenia-status", nome: "Convenia - RH", detalhes: "Erro ao processar requisições." },
-                { id: "bitrix-status", nome: "Bitrix", detalhes: "Plataforma indisponível." }
-            ];
-            sistemas.forEach(sistema => {
-                const statusElement = document.getElementById(sistema.id);
-                if (statusElement && statusElement.innerText.includes("🔴 Fora do Ar")) {
-                    enviarAlertaTeams(sistema.nome, "🔴 Fora do Ar", sistema.detalhes);
-                }
-            });
+        function atualizarStatus(apiUrl, statusId, detailsId) {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(dados => {
+                    const indicator = dados.status.indicator;
+                    const statusElement = document.getElementById(statusId);
+                    const detailsElement = document.getElementById(detailsId);
+                    const cardElement = statusElement.closest('.status-card');
+
+                    switch (indicator) {
+                        case 'none':
+                            statusElement.innerHTML = '🟢 Operacional';
+                            statusElement.className = 'status-green';
+                            cardElement.className = 'status-card';
+                            detailsElement.innerText = 'Tudo está em funcionamento.';
+                            break;
+                        case 'minor':
+                            statusElement.innerHTML = '🟡 Instável';
+                            statusElement.className = 'status-yellow';
+                            cardElement.className = 'status-card status-yellow';
+                            detailsElement.innerText = 'Algumas funcionalidades podem estar instáveis.';
+                            break;
+                        case 'major':
+                        case 'critical':
+                            statusElement.innerHTML = '🔴 Fora do Ar';
+                            statusElement.className = 'status-red';
+                            cardElement.className = 'status-card status-red';
+                            detailsElement.innerText = 'O sistema está fora do ar. A equipe do fornecedor está investigando.';
+                            break;
+                        default:
+                            statusElement.innerHTML = '⚪ Desconhecido';
+                            statusElement.className = 'status-gray';
+                            detailsElement.innerText = 'Não foi possível obter informações de status.';
+                            break;
+                    }
+                })
+                .catch(error => console.error(`Erro ao buscar status da API: ${apiUrl}`, error));
         }
 
-        function testarWebhook() {
-            enviarAlertaTeams("🚀 Teste Manual", "🔴 Fora do Ar", "Apenas um teste de alerta.");
+        function iniciarAtualizacoes() {
+            atualizarStatus('https://status.clicksign.com/api/v2/status.json', 'clicksign-status', 'clicksign-details');
+            atualizarStatus('https://status.pipefy.com/api/v2/status.json', 'pipefy-status', 'pipefy-details');
+            atualizarStatus('https://status.convenia.com.br/api/v2/status.json', 'convenia-status', 'convenia-details');
+            atualizarStatus('https://status.bitrix24.com/api/v2/status.json', 'bitrix-status', 'bitrix-details');
+            atualizarStatus('https://status.transfeera.com/api/v2/status.json', 'transfeera-status', 'transfeera-details');
+            atualizarStatus('https://status.clickcompliance.com/api/v2/status.json', 'clickcompliance-status', 'clickcompliance-details');
+            atualizarStatus('https://status.datajuri.com.br/api/v2/status.json', 'datajuri-status', 'datajuri-details');
+            atualizarUltimaAtualizacao();
         }
 
-        setInterval(verificarStatus, 60000);
+        window.onload = function () {
+            iniciarAtualizacoes();
+            setInterval(iniciarAtualizacoes, 60000);
+        };
     </script>
 </head>
 <body>
     <div class="header">Status dos Sistemas - VIPe</div>
-    <button class="refresh-button" onclick="testarWebhook()">🚀 Testar Webhook no Teams</button>
+    <button class="refresh-button" onclick="iniciarAtualizacoes()">🔄 Atualizar Status</button>
     
     <div class="status-container">
-        <div class="status-card status-green"><h3>Internet VIVO</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
-        <div class="status-card status-green"><h3>Internet Mundivox</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
-        <div class="status-card status-red" id="rbm-status"><h3>Sistema RBM (WebSCM, WebAgente, WebRH)</h3><p class="status-red">🔴 Fora do Ar</p><p class="details">🚨 Problema no acesso ao Serasa! A Dimensa (RBM) está atuando para corrigir.</p></div>
-        <div class="status-card status-green" id="clicksign-status"><h3>Clicksign</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
-        <div class="status-card status-yellow" id="pipefy-status"><h3>Pipefy</h3><p class="status-yellow">🟡 Instável</p><p class="details">Algumas funcionalidades podem estar instáveis.</p></div>
-        <div class="status-card status-green" id="convenia-status"><h3>Convenia - RH</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
-        <div class="status-card status-green" id="bitrix-status"><h3>Bitrix</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <!-- Sistemas sem API (atualização manual) -->
+        <div class="status-card"><h3>Internet VIVO</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Internet Mundivox</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Outlook</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Teams</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Sistema RBM (WebSCM, WebAgente, WebRH)</h3><p class="status-yellow">🟡 Instável</p><p class="details">Falha no Serasa.</p></div>
+        <div class="status-card"><h3>WhatsApp</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>3CX Telefonia</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+
+        <!-- Sistemas com API (atualização automática) -->
+        <div class="status-card"><h3>Clicksign</h3><p id="clicksign-status" class="status-green">🟢 Operacional</p><p class="details" id="clicksign-details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Pipefy</h3><p id="pipefy-status" class="status-green">🟢 Operacional</p><p class="details" id="pipefy-details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>ClickCompliance</h3><p id="clickcompliance-status" class="status-green">🟢 Operacional</p><p class="details" id="clickcompliance-details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Datajuri</h3><p id="datajuri-status" class="status-green">🟢 Operacional</p><p class="details" id="datajuri-details">Tudo está em funcionamento.</p></div>
     </div>
-    <p class="last-update">Última atualização automática a cada 60 segundos.</p>
+
+    <p id="last-update" class="last-update">Última atualização: --</p>
 </body>
 </html>
