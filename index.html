@@ -53,7 +53,7 @@
         }
     </style>
 <script>
-    const webhookURL = "https://ffa2.webhook.office.com/webhookb2/b3412112-f3ba-42ce-b2a1-26503876fd57@e6fdcadd-11ff-438d-8faa-6441ef124150/IncomingWebhook/aed48b87477b4edeb3be38e882f964e1/61a8d976-bf2d-4dac-86ad-d846b249896e/V2AdAjGH35ghSJQd9b8zRh75OaMwf6bqacdoJKQjsB0wE1";
+    const webhookURL = "https://ffa2.webhook.office.com/webhookb2/b3412112-f3ba-42ce-b2a1-26503876fd57@e6fdcadd-11ff-438d-8faa-6441ef124150/IncomingWebhook/fe5a217a58f6460d84b90b6a98f0f1e5/61a8d976-bf2d-4dac-86ad-d846b249896e/V2JSReM3fz00vfsqxOEVO_mn7mtMdphRnivzExJpNGGFI1";
 
     function enviarAlertaTeams(sistema, status, detalhes) {
         const mensagem = {
@@ -74,7 +74,6 @@
     }
 
     function verificarStatus() {
-        // Lista de sistemas que podem gerar alerta no Teams
         const sistemas = [
             { id: "rbm-status", nome: "Sistema RBM", detalhes: "Falha no Serasa detectada. Dimensa está investigando." },
             { id: "clicksign-status", nome: "Clicksign", detalhes: "Serviço fora do ar." },
@@ -91,9 +90,9 @@
         });
     }
 
-    // Verifica o status dos sistemas a cada 1 minuto e envia alerta se algo cair
     setInterval(verificarStatus, 60000);
 </script>
+
 
 </head>
 <body>
