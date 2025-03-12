@@ -117,7 +117,8 @@
 </head>
 <body>
     <div class="header">Status dos Sistemas - VIPe</div>
-    <button class="refresh-button" onclick="iniciarAtualizacoes()">🔄 Atualizar Status</button>
+    <button class="refresh-button" onclick="location.reload()">🔄 Atualizar Status</button>
+
     
     <div class="status-container">
         <!-- Sistemas sem API (atualização manual) -->
@@ -125,9 +126,18 @@
         <div class="status-card"><h3>Internet Mundivox</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
         <div class="status-card"><h3>Outlook</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
         <div class="status-card"><h3>Teams</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
-        <div class="status-card"><h3>Sistema RBM (WebSCM, WebAgente, WebRH)</h3><p class="status-yellow">🟡 Instável</p><p class="details">Falha no Serasa.</p></div>
+        <div class="status-card"><h3>Sistema RBM (WebSCM, WebAgente, WebRH)</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Assina RBM</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Ponto Mais</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
         <div class="status-card"><h3>WhatsApp</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Metabase</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>BigData</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
         <div class="status-card"><h3>3CX Telefonia</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Omie</h3><p class="status-green">🟢 Operacional</p><p class="details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Sistema Função</h3><p class="status-gray">⚪ Em Construção</p><p class="details">Sistema em desenvolvimento, em breve disponível.</p></div>
+        <div class="status-card"><h3>Convenia - RH</h3><p id="convenia-status" class="status-green">🟢 Operacional</p><p class="details" id="convenia-details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Bitrix</h3><p id="bitrix-status" class="status-green">🟢 Operacional</p><p class="details" id="bitrix-details">Tudo está em funcionamento.</p></div>
+        <div class="status-card"><h3>Transfeera</h3><p id="transfeera-status" class="status-green">🟢 Operacional</p><p class="details" id="transfeera-details">Tudo está em funcionamento.</p></div>
 
         <!-- Sistemas com API (atualização automática) -->
         <div class="status-card"><h3>Clicksign</h3><p id="clicksign-status" class="status-green">🟢 Operacional</p><p class="details" id="clicksign-details">Tudo está em funcionamento.</p></div>
